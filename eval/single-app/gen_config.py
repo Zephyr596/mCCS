@@ -139,7 +139,8 @@ def generate(size_list, command, node_configurations, communicator, mccs_cfg_pat
 
 
 def four_gpu_ecmp():
-    size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    # size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    size_list = ["32K"]
     command = ["allreduce", "allgather"]
     node_configurations = [
         ("4GPU_ECMP", [(2, 1), (3, 1), (1, 1), (5, 1)]),
@@ -147,7 +148,8 @@ def four_gpu_ecmp():
     generate(size_list, command, node_configurations, 42, "eval/single-app/4gpu.toml")
 
 def four_gpu_flow_scheduling():
-    size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    # size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    size_list = ["32K"]
     command = ["allreduce", "allgather"]
     node_configurations = [
         ("4GPU_FLOW", [(2, 1), (3, 1), (1, 1), (5, 1)]),
@@ -155,7 +157,8 @@ def four_gpu_flow_scheduling():
     generate(size_list, command, node_configurations, 137, "eval/single-app/4gpu.toml")
 
 def eight_gpu_ecmp():
-    size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    # size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    size_list = ["32K"]
     command = ["allreduce", "allgather"]
     node_configurations = [
         ("8GPU_ECMP", [(2, 2), (3, 2), (1, 2), (5, 2)]),
@@ -163,7 +166,8 @@ def eight_gpu_ecmp():
     generate(size_list, command, node_configurations, 42, "eval/single-app/8gpu.toml")
 
 def eight_gpu_flow_scheduling():
-    size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    # size_list = ["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"]
+    size_list = ["32K"]
     command = ["allreduce", "allgather"]
     node_configurations = [
         ("8GPU_FLOW", [(2, 2), (3, 2), (1, 2), (5, 2)]),
@@ -171,6 +175,6 @@ def eight_gpu_flow_scheduling():
     generate(size_list, command, node_configurations, 137, "eval/single-app/8gpu.toml")
 
 four_gpu_ecmp()
-four_gpu_flow_scheduling()
-eight_gpu_ecmp()
-eight_gpu_flow_scheduling()
+# four_gpu_flow_scheduling()
+# eight_gpu_ecmp()
+# eight_gpu_flow_scheduling()

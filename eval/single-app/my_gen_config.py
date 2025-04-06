@@ -1,15 +1,14 @@
 import toml
 import os
 
-# Hostname or IP address of each VM
-addrs = {
-    "host1": "10.33.120.103",
-    "host2": "10.33.120.104",
+host_addrs = {
+    0: "10.33.120.103",
+    1: "10.33.120.104"
 }
 
 
 class BenchArgs:
-    def __init__(self, root_addr, rank, num_ranks, cuda_dev, size, comm, round) -> None:
+    def __init__(self, root_addr, rank, num_ranks, cuda_dev, size, comm, round):
         self.root_addr = root_addr
         self.rank = rank
         self.num_ranks = num_ranks
@@ -19,89 +18,88 @@ class BenchArgs:
         self.round = round
 
     def get_args(self):
-        # Format the arguments for CLI usage
         return f"--root-addr {self.root_addr} --rank {self.rank} " \
                f"--num-ranks {self.num_ranks} --cuda-device-idx {self.cuda_dev} " \
                f"--size {self.size} --communicator {self.comm} --round {self.round} --size-in-byte"
 
 
-def convert_size(size: str):
-    # Convert human-readable size string to integer bytes
-    if size.endswith("K"):
-        return int(size[:-1]) * 1024
-    elif size.endswith("M"):
-        return int(size[:-1]) * 1024 * 1024
-    elif size.endswith("G"):
-        return int(size[:-1]) * 1024 * 1024 * 1024
-    return int(size)
+def convert_size(size_str):
+    if size_str.endswith("K"):
+        return int(size_str[:-1]) * 1024
+    elif size_str.endswith("M"):
+        return int(size_str[:-1]) * 1024 * 1024
+    elif size_str.endswith("G"):
+        return int(size_str[:-1]) * 1024 * 1024 * 1024
+    else:
+        return int(size_str)
 
 
-def generate_2vm_config(
-    name: str,
-    binary: str,
-    daemon_args: str,
-    size_list,
-    comm_id: int = 42,
-    round: int = 20,
-    out_dir: str = "output",
-):
-    os.makedirs(out_dir, exist_ok=True)
-
-    root = "vm1"  # The root node used for communication
-    machines = [("vm1", 1), ("vm2", 1)]  # Each VM uses 1 GPU
-
-    for size_str in size_list:
-        size_bytes = convert_size(size_str)
-        config = {
-            "name": name,
-            "group": name,
-            "worker": []
+def generate_config(name, group, binary, root_id, machine_map, size, comm, daemon_args=""):
+    def gen_daemon(machine_id):
+        return {
+            "host": f"host{machine_id + 1}",
+            "bin": "mccs",
+            "args": f"--host {machine_id} {daemon_args}",
+            "weak": True,
+            "dependencies": [],
         }
 
-        # Add mccs daemons (one per VM)
-        for vm_name, _ in machines:
-            config["worker"].append({
-                "host": vm_name,
-                "bin": "mccs",
-                "args": f"--host {vm_name} {daemon_args}",
-                "weak": True,
-                "dependencies": [],
+    root_addr = host_addrs[root_id]
+    num_ranks = sum([gpu_cnt for _, gpu_cnt in machine_map])
+    workers = [gen_daemon(mid) for mid, _ in machine_map]
+    dep = [i for i in range(len(machine_map))]
+
+    global_rank = 0
+    for mid, gpu_cnt in machine_map:
+        for local_rank in range(gpu_cnt):
+            args = BenchArgs(
+                root_addr=root_addr,
+                rank=global_rank,
+                num_ranks=num_ranks,
+                cuda_dev=local_rank,
+                size=size,
+                comm=comm,
+                round=20,
+            )
+            workers.append({
+                "host": f"host{mid + 1}",
+                "bin": binary,
+                "args": args.get_args(),
+                "dependencies": dep,
             })
+            global_rank += 1
 
-        # Add benchmark workers (e.g., allreduce_bench)
-        total_ranks = sum(g for _, g in machines)
-        global_rank = 0
-        for vm_name, gpu_cnt in machines:
-            for local_rank in range(gpu_cnt):
-                args = BenchArgs(
-                    root_addr=addrs[root],
-                    rank=global_rank,
-                    num_ranks=total_ranks,
-                    cuda_dev=local_rank,
-                    size=size_bytes,
-                    comm=comm_id,
-                    round=round,
-                )
-                config["worker"].append({
-                    "host": vm_name,
-                    "bin": binary,
-                    "args": args.get_args(),
-                    "dependencies": [0, 1],  # indexes of daemons
-                })
-                global_rank += 1
-
-        # Save the TOML file
-        out_path = f"{out_dir}/{name}_{binary}_{size_str}.toml"
-        with open(out_path, "w") as f:
-            toml.dump(config, f)
-        print(f"✅ Saved: {out_path}")
+    return {
+        "name": name,
+        "group": group,
+        "worker": workers,
+    }
 
 
-# ✨ Run to generate TOML config files
-generate_2vm_config(
-    name="2VM_1NODE",
-    binary="allreduce_bench",
-    daemon_args="--config eval/single-app/2vm.toml",
-    size_list=["32K", "128K", "512K", "2M", "8M", "32M", "128M", "512M"],
-    comm_id=42,
-)
+def generate():
+    os.makedirs("output", exist_ok=True)
+
+    size_list = ["32K"]
+    command = ["allreduce"]
+    node_config = [(0, 1), (1, 1)]  # host 0 and 1, each with 1 GPU
+    root_node_id = 0
+    group_name = "2GPU_TEST"
+    config_path = "eval/single-app/2gpu.toml"
+    communicator = 42
+
+    for comm in command:
+        for size in size_list:
+            config = generate_config(
+                name=f"{group_name}/{comm}/{size}",
+                group=group_name,
+                binary=comm + "_bench",
+                root_id=root_node_id,
+                machine_map=node_config,
+                size=convert_size(size),
+                comm=communicator,
+                daemon_args=f"--config {config_path}",
+            )
+            with open(f"output/{group_name}_{comm}_{size}.toml", "w") as f:
+                toml.dump(config, f)
+
+generate()

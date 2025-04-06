@@ -61,7 +61,7 @@ killall:
 
 [private]
 launch group folder:
-  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/ --group {{group}} --silent --output-dir /tmp/{{folder}}
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/ --group {{group}} --output-dir /tmp/{{folder}}
 
 [private]
 launch-multi group folder:
@@ -82,6 +82,9 @@ one_4gpu_flow :
 [private]
 one_8gpu_flow :
   just launch 8GPU_FLOW single-app-flow
+
+zehua_test_two_gpu:
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/2GPU_TEST_allreduce_32K.toml --output-dir /tmp/single-app0
 
 four_gpu_ecmp:
   ./eval/set_ecmp_hashing_algo.sh everything
