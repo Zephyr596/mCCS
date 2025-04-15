@@ -2,6 +2,8 @@ mccs_daemon_basename = "mccs-deamon"
 mccs_daemon_prefix = "/tmp/mccs-${USER}"
 addrs = [
     "0.0.0.0",
+    "10.200.1.1",
+    "10.200.1.2",
     "192.168.211.2",
     "192.168.211.34",
     "192.168.211.66",

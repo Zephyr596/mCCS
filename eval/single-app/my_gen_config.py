@@ -2,8 +2,8 @@ import toml
 import os
 
 host_addrs = {
-    0: "10.33.120.103",
-    1: "10.33.120.104"
+    0: "10.200.1.1",
+    1: "10.200.1.2"
 }
 
 
@@ -80,7 +80,7 @@ def generate():
     os.makedirs("output", exist_ok=True)
 
     size_list = ["32K"]
-    command = ["allreduce"]
+    command = ["allreduce", "allgather"]
     node_config = [(0, 1), (1, 1)]  # host 0 and 1, each with 1 GPU
     root_node_id = 0
     group_name = "2GPU_TEST"

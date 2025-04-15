@@ -649,7 +649,7 @@ mod cleanup {
 
 fn main() {
     let _guard = cleanup::SttySane::new();
-    init_env_log("RUST_LOG", "info");
+    init_env_log("RUST_LOG", "debug");
 
     let opt = Opt::from_args();
     log::info!("options: {:?}", opt);
