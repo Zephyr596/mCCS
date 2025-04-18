@@ -57,10 +57,13 @@ auto-back LEVEL='info':
 #   ssh danyang-0{{host}} -t "pkill mccs"
 
 kill host:
-
+  ssh host{{host}} -t "pkill mccs"
 
 killall:
-  just kill 1; just kill 2; just kill 3; just kill 5
+  just kill 1; just kill 2
+
+# killall:
+#   just kill 1; just kill 2; just kill 3; just kill 5
 
 [private]
 launch group folder:
@@ -87,7 +90,7 @@ one_8gpu_flow :
   just launch 8GPU_FLOW single-app-flow
 
 zehua_debug:
-  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/2GPU_TEST_allgather_32K.toml --output-dir /tmp/single-app0 --debug
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/2GPU_TEST_allgather_512M.toml --output-dir /tmp/single-app0 --debug
 
 four_gpu_ecmp:
   ./eval/set_ecmp_hashing_algo.sh everything

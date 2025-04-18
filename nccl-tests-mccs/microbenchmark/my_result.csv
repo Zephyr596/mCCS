@@ -1,0 +1,17 @@
+Solution,App,Size (Bytes),Dtype,Latency (us),AlgBW (GB/s),BusBW (GB/s)
+badring,allreduce,32768,half,63.61,0.52,0.52
+badring,allreduce,131072,half,91.19,1.44,1.44
+badring,allreduce,524288,half,187.7,2.79,2.79
+badring,allreduce,2097152,half,601.9,3.48,3.48
+badring,allreduce,8388608,half,2184.6,3.84,3.84
+badring,allreduce,33554432,half,9561.5,3.51,3.51
+badring,allreduce,134217728,half,34748,3.86,3.86
+badring,allreduce,536870912,half,137691,3.90,3.90
+goodring,allreduce,32768,half,63.08,0.52,0.52
+goodring,allreduce,131072,half,86.96,1.51,1.51
+goodring,allreduce,524288,half,187.9,2.79,2.79
+goodring,allreduce,2097152,half,599.7,3.50,3.50
+goodring,allreduce,8388608,half,2176.8,3.85,3.85
+goodring,allreduce,33554432,half,9151.0,3.67,3.67
+goodring,allreduce,134217728,half,34701,3.87,3.87
+goodring,allreduce,536870912,half,138169,3.89,3.89

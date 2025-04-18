@@ -331,7 +331,7 @@ impl DaemonEngine {
                         "[Daemon-{}] try to issue allGather ({:p},{:p}) on communicator {}@{}",
                         self.id.0,
                         send_buf_addr as *const c_void,
-                        recv_buf_addr as *const c_void,
+                        recv_buf_addr as *const c_vid,
                         comm.cuda_device_idx,
                         comm.comm_id,
                     );

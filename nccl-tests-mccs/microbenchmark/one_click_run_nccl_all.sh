@@ -24,10 +24,10 @@ ln -sf $output_dir /tmp/nccl_single_app
 
 ./run_nccl_multiple_times.sh $num_iters 1 badring allgather
 ./run_nccl_multiple_times.sh $num_iters 1 goodring allgather
-./run_nccl_multiple_times.sh $num_iters 2 badring allgather
-./run_nccl_multiple_times.sh $num_iters 2 goodring allgather
+# ./run_nccl_multiple_times.sh $num_iters 2 badring allgather
+# ./run_nccl_multiple_times.sh $num_iters 2 goodring allgather
 
 ./run_nccl_multiple_times.sh $num_iters 1 badring allreduce
 ./run_nccl_multiple_times.sh $num_iters 1 goodring allreduce
-./run_nccl_multiple_times.sh $num_iters 2 badring allreduce
-./run_nccl_multiple_times.sh $num_iters 2 goodring allreduce
+# ./run_nccl_multiple_times.sh $num_iters 2 badring allreduce
+# ./run_nccl_multiple_times.sh $num_iters 2 goodring allreduce

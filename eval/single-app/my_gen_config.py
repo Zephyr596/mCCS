@@ -79,7 +79,7 @@ def generate_config(name, group, binary, root_id, machine_map, size, comm, daemo
 def generate():
     os.makedirs("output", exist_ok=True)
 
-    size_list = ["32K"]
+    size_list = ["512M"]
     command = ["allreduce", "allgather"]
     node_config = [(0, 1), (1, 1)]  # host 0 and 1, each with 1 GPU
     root_node_id = 0

@@ -24,5 +24,5 @@ output_dir=/tmp/nccl_single_app
 
 for i in `seq 1 $num_iters`; do
 	echo Case $i
-	./run_nccl_once.sh $num_gpus $ring_type $app |& tee $output_dir/${i}_${app}_${ring_type}_${num_gpus}.stdout
+	./my_run_nccl_once.sh $num_gpus $ring_type $app |& tee $output_dir/${i}_${app}_${ring_type}_${num_gpus}.stdout
 done
