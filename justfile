@@ -60,7 +60,9 @@ kill host:
   ssh host{{host}} -t "pkill mccs"
 
 killall:
-  just kill 1; just kill 2
+  just kill 1; just kill 2;just kill 3;just kill 4
+  ssh host2 -t "pkill sender"
+  ssh host3 -t "pkill receiver"
 
 # killall:
 #   just kill 1; just kill 2; just kill 3; just kill 5
@@ -90,7 +92,10 @@ one_8gpu_flow :
   just launch 8GPU_FLOW single-app-flow
 
 zehua_debug:
-  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/2GPU_TEST_allgather_512M.toml --output-dir /tmp/single-app0 --debug
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/2GPU_TEST_allreduce_512M.toml --output-dir /tmp/single-app0 --debug
+
+zehua_4gpu:
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/single-app/output/4GPU_TEST_allreduce_512M.toml --output-dir /tmp/single-4gpu --debug
 
 four_gpu_ecmp:
   ./eval/set_ecmp_hashing_algo.sh everything
@@ -137,7 +142,11 @@ single-only-one-round:
   just one_8gpu_flow
 
 allreduce-multi type setup cnt:
-  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/multi-app/output/multi-allreduce-{{type}}-setup{{setup}}.toml --silent --output-dir /tmp/multi-allreduce-{{type}}-{{cnt}}
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/multi-app/output/multi-allreduce-{{type}}-setup{{setup}}.toml --output-dir /tmp/multi-allreduce-{{type}}-{{cnt}}
+
+my_allreduce-multi type setup cnt:
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/multi-app/output/my_multi-allreduce-{{type}}-setup{{setup}}.toml --output-dir /tmp/multi-allreduce-{{type}}-{{cnt}}
+
 
 batched-allreduce-multi:
   #!/usr/bin/env bash
@@ -215,6 +224,12 @@ one-setup4-normal type cnt:
 one-setup4-ecmp type cnt:
   cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/multi-app/output/setup4-real-ecmp-{{type}}.toml --silent --output-dir /tmp/setup4-real-ecmp-{{cnt}} --timeout 600
 
+one-setup5-normal cnt:
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/multi-app/output/setup5-real-qosv2.toml --output-dir /tmp/setup5-real-normal-{{cnt}} --timeout 600
+
+one-setup5-woEnforce cnt:
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/multi-app/output/setup5-real-qosv2-woEnforce.toml --output-dir /tmp/setup5-real-woEnforce-{{cnt}} --timeout 600
+
 collect-setup4-ecmp:
   #!/usr/bin/env bash
   ./eval/set_ecmp_hashing_algo.sh everything
@@ -266,14 +281,35 @@ run-dynamic:
   sleep 30
   cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-gpt-2.toml --silent --output-dir /tmp/dynamic-config --timeout 600 &
   sleep 30
-  cargo run --bin ring_config -- -c eval/dynamic-config/dynamic-patch.toml
+  cargo run --bin ring_config -- -c eval/dynamic-config/my_dynamic-patch.toml
 
 reconfig-ring:
-  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-ring-reconfig.toml --silent --output-dir /tmp/ring-reconfig --timeout 600 &
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-ring-reconfig.toml  --output-dir /tmp/ring-reconfig --timeout 6000 &
   sleep 30
-  cargo run --bin ring_config -- -c eval/dynamic-config/reconfig-patch.toml
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-ring-reconfig1.toml  --output-dir /tmp/ring-reconfig --timeout 6000 &
+  sleep 60
+  cargo run --bin ring_config -- -c eval/dynamic-config/my_reconfig-patch.toml
+
+# reconfig-ring-test:
+#   cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-ring-reconfig.toml  --output-dir /tmp/ring-reconfig-test --timeout 6000 &
+#   sleep 300
+#   # start send from host2 to host3
+#   sleep 300
+#   cargo run --bin ring_config -- -c eval/dynamic-config/my_reconfig-patch.toml
+
+reconfig-ring-test:
+  ssh host3 "nohup bash -c 'cd /home/caoz0a/rdma_send && exec ./receiver' > /tmp/receiver.log 2>&1 < /dev/null & disown" &
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-ring-reconfig.toml  --output-dir /tmp/ring-reconfig-test --timeout 6000 &
+  sleep 150
+  ssh host2 "nohup bash -c 'cd /home/caoz0a/rdma_send && exec ./sender 10.200.2.3 64' > /tmp/sender.log 2>&1 < /dev/null & disown" &
+  sleep 150
+  cargo run --bin ring_config -- -c eval/dynamic-config/my_reconfig-patch.toml
 
 reconfig-ring-allreduce:
-  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-allreduce-ring-reconfig.toml --silent --output-dir /tmp/allreduce-ring-reconfig --timeout 600 &
+  cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-allreduce-ring-reconfig.toml --output-dir /tmp/allreduce-ring-reconfig --timeout 6000 &
   sleep 40
-  cargo run --bin ring_config -- -c eval/dynamic-config/reconfig-patch.toml
+  cargo run --bin ring_config -- -c eval/dynamic-config/my_reconfig-patch.toml
+
+
+  # sleep 5
+  # cargo run --bin launcher -- --configfile launcher/config.toml --benchmark eval/dynamic-config/launch-ring-reconfig2.toml  --output-dir /tmp/ring-reconfig --timeout 6000 &

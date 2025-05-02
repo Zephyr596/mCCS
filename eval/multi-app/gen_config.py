@@ -1,15 +1,24 @@
 # %%
 import toml
 
+# addrs = [
+#     "0.0.0.0",
+#     "192.168.211.2",
+#     "192.168.211.34",
+#     "192.168.211.66",
+#     "192.168.211.130",
+#     "192.168.211.162",
+#     "192.168.211.195",
+# ]
+
 addrs = [
     "0.0.0.0",
-    "192.168.211.2",
-    "192.168.211.34",
-    "192.168.211.66",
-    "192.168.211.130",
-    "192.168.211.162",
-    "192.168.211.195",
+    "10.200.2.2",
+    "10.200.2.1",
+    "10.200.2.3",
+    "10.200.2.4",
 ]
+
 
 
 def convert_size(size: str):
@@ -90,7 +99,7 @@ def gen_daemon(
     daemon_args: str,
 ):
     return {
-        "host": f"danyang-0{machine_id}",
+        "host": f"host{machine_id}",
         "bin": "mccs",
         "args": f"--host {machine_id} {daemon_args}",
         "weak": True,
@@ -136,7 +145,7 @@ def generate_config(
         ):
             apps.append(
                 {
-                    "host": f"danyang-0{machine}",
+                    "host": f"host{machine}",
                     "bin": app.binary,
                     "args": arg.get_args(),
                     "dependencies": list(range(len(daemons))),
@@ -320,9 +329,13 @@ def allreduce_setup3():
 
 
 def allreduce_setup4():
-    job1_rank_map = [(2, [0, 1]), (1, [0, 1])]
-    job2_rank_map = [(3, [0]), (5, [0])]
-    job3_rank_map = [(3, [1]), (5, [1])]
+    # job1_rank_map = [(2, [0, 1]), (1, [0, 1])]
+    # job2_rank_map = [(3, [0]), (5, [0])]
+    # job3_rank_map = [(3, [1]), (5, [1])]
+    job1_rank_map = [(1, [0]), (3, [0])]  # app1
+    job2_rank_map = [(2, [0]), (4, [0])]  # app2
+    job3_rank_map = [(1, [0]), (2, [0])]  # app3
+
     config = generate_config(
         "multi-allreduce-ecmp-setup4",
         "multi-allreduce-ecmp",
@@ -351,7 +364,7 @@ def allreduce_setup4():
         ],
         "--config eval/multi-app/ecmp-setup4.toml",
     )
-    with open("output/multi-allreduce-ecmp-setup4.toml", "w") as f:
+    with open("output/my_multi-allreduce-ecmp-setup4.toml", "w") as f:
         toml.dump(config, f)
     config = generate_config(
         "multi-allreduce-flow-setup4",
@@ -379,18 +392,18 @@ def allreduce_setup4():
                 comm=83,
             ),
         ],
-        "--config eval/multi-app/flow-setup4.toml",
+        "--config eval/multi-app/my_flow-setup4.toml",
     )
-    with open("output/multi-allreduce-flow-setup4.toml", "w") as f:
+    with open("output/my_multi-allreduce-flow-setup4.toml", "w") as f:
         toml.dump(config, f)
 
 
 def allreduce_reconfig():
-    gpt_map = [(2, [0, 1]), (3, [0, 1]), (1, [0, 1]), (5, [0, 1])]
+    gpt_map = [(2, [0]), (3, [0]), (1, [0]), (4, [0])]
 
     config = generate_config(
-        f"8gpu-dynamic-allreduce",
-        f"8gpu-dynamic-allreduce",
+        f"4gpu-dynamic-allreduce",
+        f"4gpu-dynamic-allreduce",
         [
             AppProperties(
                 name="reconfig-allreduce",
@@ -400,15 +413,15 @@ def allreduce_reconfig():
                 comm=600,
             )
         ],
-        "--config eval/dynamic-config/reconfig.toml",
+        "--config eval/dynamic-config/my_reconfig.toml",
         round=1
     )
     with open(f"../dynamic-config/launch-allreduce-ring-reconfig.toml", "w") as f:
         toml.dump(config, f)
 
 
-allreduce_setup1()
-allreduce_setup2()
-allreduce_setup3()
-allreduce_setup4()
+# allreduce_setup1()
+# allreduce_setup2()
+# allreduce_setup3()
+# allreduce_setup4()
 allreduce_reconfig()

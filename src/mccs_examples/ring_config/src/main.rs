@@ -1,5 +1,5 @@
 use std::io::Write;
-use std::net::{IpAddr, Ipv4Addr, SocketAddr, TcpStream};
+use std::net::{IpAddr, SocketAddr, TcpStream};
 use std::path::{Path, PathBuf};
 
 use byteorder::{ByteOrder, LittleEndian};

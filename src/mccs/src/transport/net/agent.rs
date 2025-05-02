@@ -513,6 +513,11 @@ pub fn net_agent_send_progress(
             if ready {
                 let comm_id = qos_service::CommunicatorId(op.communicator_id.0);
                 let interval = schedule.schedule.get(&comm_id);
+                // log::info!(
+                //     "net_agent_send_progress(): comm_id={:?} interval={:?}",
+                //     comm_id,
+                //     interval
+                // );
                 let delay_send = if let Some(interval) = interval {
                     let enforce = if let Some(step) = interval.enforce_step {
                         resources.qos_round % step == 0 
@@ -520,6 +525,11 @@ pub fn net_agent_send_progress(
                         false
                     };
                     if enforce {
+                        // log::info!(
+                        //     "net_agent_send_progress(): comm_id={:?} interval={:?}",
+                        //     comm_id,
+                        //     interval
+                        // );
                         let time = SystemTime::now();
                         let elapsed = time.duration_since(UNIX_EPOCH).unwrap();
                         let epoch_ts = (elapsed.as_micros() % schedule.epoch_microsecs as u128) as u64;
@@ -538,6 +548,12 @@ pub fn net_agent_send_progress(
                     interval,
                     delay_send
                 );
+                // log::info!(
+                //     "net_agent_send_progress(): comm_id={:?} interval={:?} delay_send={}",
+                //     comm_id,
+                //     interval,
+                //     delay_send
+                // );
                 if !delay_send {
                     let request_id = provider.initiate_send(
                         resources.send_comm.as_mut(),

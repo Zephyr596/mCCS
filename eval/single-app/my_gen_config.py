@@ -2,8 +2,10 @@ import toml
 import os
 
 host_addrs = {
-    0: "10.200.1.1",
-    1: "10.200.1.2"
+    1: "10.200.2.2",
+    2: "10.200.2.1",
+    3: "10.200.2.3",
+    4: "10.200.2.4"
 }
 
 
@@ -37,7 +39,7 @@ def convert_size(size_str):
 def generate_config(name, group, binary, root_id, machine_map, size, comm, daemon_args=""):
     def gen_daemon(machine_id):
         return {
-            "host": f"host{machine_id + 1}",
+            "host": f"host{machine_id}",
             "bin": "mccs",
             "args": f"--host {machine_id} {daemon_args}",
             "weak": True,
@@ -62,7 +64,7 @@ def generate_config(name, group, binary, root_id, machine_map, size, comm, daemo
                 round=20,
             )
             workers.append({
-                "host": f"host{mid + 1}",
+                "host": f"host{mid}",
                 "bin": binary,
                 "args": args.get_args(),
                 "dependencies": dep,
@@ -81,10 +83,10 @@ def generate():
 
     size_list = ["512M"]
     command = ["allreduce", "allgather"]
-    node_config = [(0, 1), (1, 1)]  # host 0 and 1, each with 1 GPU
-    root_node_id = 0
-    group_name = "2GPU_TEST"
-    config_path = "eval/single-app/2gpu.toml"
+    node_config = [(1, 1), (2, 1), (3, 1), (4, 1)]  # host 0 and 1, each with 1 GPU
+    root_node_id = 1
+    group_name = "4GPU_TEST"
+    config_path = "eval/single-app/4gpu.toml"
     communicator = 42
 
     for comm in command:

@@ -1,0 +1,78 @@
+name = "setup4-real-ecmp-qosv2"
+group = "setup4-real-ecmp"
+[[worker]]
+host = "danyang-01"
+bin = "mccs"
+args = "--host 1 --config eval/multi-app/output/setup4-mccs-ecmp-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "danyang-02"
+bin = "mccs"
+args = "--host 2 --config eval/multi-app/output/setup4-mccs-ecmp-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "danyang-03"
+bin = "mccs"
+args = "--host 3 --config eval/multi-app/output/setup4-mccs-ecmp-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "danyang-05"
+bin = "mccs"
+args = "--host 5 --config eval/multi-app/output/setup4-mccs-ecmp-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "danyang-02"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 0 --iters 101 --config workloads/setup-4_vgg.toml --verbose --name vgg"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "danyang-02"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 1 --iters 101 --config workloads/setup-4_vgg.toml --verbose --name vgg"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "danyang-01"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 2 --iters 101 --config workloads/setup-4_vgg.toml --verbose --name vgg"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "danyang-01"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 3 --iters 101 --config workloads/setup-4_vgg.toml --verbose --name vgg"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "danyang-03"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.66 --rank 0 --iters 1501 --config workloads/setup-4_gpt_1.toml --verbose --name gpt_1"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "danyang-05"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.66 --rank 1 --iters 1501 --config workloads/setup-4_gpt_1.toml --verbose --name gpt_1"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "danyang-03"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.66 --rank 0 --iters 3001 --config workloads/setup-4_gpt_2.toml --verbose --name gpt_2"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "danyang-05"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.66 --rank 1 --iters 3001 --config workloads/setup-4_gpt_2.toml --verbose --name gpt_2"
+dependencies = [ 0, 1, 2, 3,]
+

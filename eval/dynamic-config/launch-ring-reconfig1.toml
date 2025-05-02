@@ -1,0 +1,14 @@
+name = "setup4-dynamic-gpt-1"
+group = "setup4-dynamic-gpt-1"
+[[worker]]
+host = "host2"
+bin = "traffic_gen"
+args = "--root-addr 10.200.2.1 --rank 0 --iters 5001 --config workloads/setup-4_gpt_1.toml --verbose --name gpt_1"
+dependencies = []
+
+[[worker]]
+host = "host3"
+bin = "traffic_gen"
+args = "--root-addr 10.200.2.1 --rank 1 --iters 5001 --config workloads/setup-4_gpt_1.toml --verbose --name gpt_1"
+dependencies = []
+

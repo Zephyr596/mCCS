@@ -15,12 +15,12 @@ job=$1
 
 case $job in
 	blue)
-		device_id="0,1"
+		device_id="0"
 		tclass=0
 		num_channels=2
 		cat > hostfile.$job <<EOF
-danyang-02 slots=2
-danyang-01 slots=2
+host1 slots=1
+host3 slots=1
 EOF
 		;;
 	green)
@@ -28,8 +28,8 @@ EOF
 		tclass=106
 		num_channels=2
 		cat > hostfile.$job <<EOF
-danyang-03 slots=1
-danyang-05 slots=1
+host2 slots=1
+host4 slots=1
 EOF
 		;;
 	red)
@@ -37,8 +37,8 @@ EOF
 		tclass=66
 		num_channels=2
 		cat > hostfile.$job <<EOF
-danyang-03 slots=1
-danyang-05 slots=1
+host1 slots=1
+host2 slots=1
 EOF
 		;;
 	*)

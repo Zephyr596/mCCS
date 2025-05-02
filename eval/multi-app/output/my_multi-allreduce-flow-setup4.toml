@@ -1,0 +1,66 @@
+name = "multi-allreduce-flow-setup4"
+group = "multi-allreduce-flow"
+[[worker]]
+host = "host1"
+bin = "mccs"
+args = "--host 1 --config eval/multi-app/my_flow-setup4.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host2"
+bin = "mccs"
+args = "--host 2 --config eval/multi-app/my_flow-setup4.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host3"
+bin = "mccs"
+args = "--host 3 --config eval/multi-app/my_flow-setup4.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host4"
+bin = "mccs"
+args = "--host 4 --config eval/multi-app/my_flow-setup4.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host1"
+bin = "allreduce_bench"
+args = "--root-addr 10.200.2.2 --rank 0 --num-ranks 2 --cuda-device-idx 0 --size 134217728 --communicator 81 --round 25 --size-in-byte --name app1 --epoch 4"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host3"
+bin = "allreduce_bench"
+args = "--root-addr 10.200.2.2 --rank 1 --num-ranks 2 --cuda-device-idx 0 --size 134217728 --communicator 81 --round 25 --size-in-byte --name app1 --epoch 4"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host2"
+bin = "allreduce_bench"
+args = "--root-addr 10.200.2.1 --rank 0 --num-ranks 2 --cuda-device-idx 0 --size 134217728 --communicator 82 --round 25 --size-in-byte --name app2 --epoch 4"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host4"
+bin = "allreduce_bench"
+args = "--root-addr 10.200.2.1 --rank 1 --num-ranks 2 --cuda-device-idx 0 --size 134217728 --communicator 82 --round 25 --size-in-byte --name app2 --epoch 4"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host1"
+bin = "allreduce_bench"
+args = "--root-addr 10.200.2.2 --rank 0 --num-ranks 2 --cuda-device-idx 0 --size 134217728 --communicator 83 --round 25 --size-in-byte --name app3 --epoch 4"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host2"
+bin = "allreduce_bench"
+args = "--root-addr 10.200.2.2 --rank 1 --num-ranks 2 --cuda-device-idx 0 --size 134217728 --communicator 83 --round 25 --size-in-byte --name app3 --epoch 4"
+dependencies = [ 0, 1, 2, 3,]
+

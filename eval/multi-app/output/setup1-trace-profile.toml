@@ -1,0 +1,40 @@
+name = "setup1-profile"
+group = "setup1-profile"
+[[worker]]
+host = "danyang-01"
+bin = "mccs"
+args = "--host 1 --config eval/multi-app/setup1-trace-profile.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "danyang-02"
+bin = "mccs"
+args = "--host 2 --config eval/multi-app/setup1-trace-profile.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "danyang-02"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 0 --iters 101 --config workloads/setup-1_vgg_0.toml --verbose --name job1"
+dependencies = [ 0, 1,]
+
+[[worker]]
+host = "danyang-02"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 1 --iters 101 --config workloads/setup-1_vgg_0.toml --verbose --name job1"
+dependencies = [ 0, 1,]
+
+[[worker]]
+host = "danyang-01"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 2 --iters 101 --config workloads/setup-1_vgg_0.toml --verbose --name job1"
+dependencies = [ 0, 1,]
+
+[[worker]]
+host = "danyang-01"
+bin = "traffic_gen"
+args = "--root-addr 192.168.211.34 --rank 3 --iters 101 --config workloads/setup-1_vgg_0.toml --verbose --name job1"
+dependencies = [ 0, 1,]
+

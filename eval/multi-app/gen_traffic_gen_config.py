@@ -2,12 +2,10 @@ import toml
 
 addrs = [
     "0.0.0.0",
-    "192.168.211.2",
-    "192.168.211.34",
-    "192.168.211.66",
-    "192.168.211.130",
-    "192.168.211.162",
-    "192.168.211.195",
+    "10.200.2.2",
+    "10.200.2.1",
+    "10.200.2.3",
+    "10.200.2.4",
 ]
 
 
@@ -36,7 +34,7 @@ def gen_daemon(
     daemon_args: str,
 ):
     return {
-        "host": f"danyang-0{machine_id}",
+        "host": f"host{machine_id}",
         "bin": "mccs",
         "args": f"--host {machine_id} {daemon_args}",
         "weak": True,
@@ -116,7 +114,7 @@ def generate_traffic_gen_config(
         ):
             apps.append(
                 {
-                    "host": f"danyang-0{machine}",
+                    "host": f"host{machine}",
                     "bin": app.binary,
                     "args": arg.get_args(),
                     "dependencies": list(range(len(daemons))),
@@ -321,7 +319,7 @@ def setup4_dynamic():
 
 
 def ring_reconfig():
-    gpt_map = [(2, 2), (3, 2), (1, 2), (5, 2)]
+    gpt_map = [(1, 1), (2, 1), (3, 1), (4, 1)]
 
     config = generate_traffic_gen_config(
         f"setup4-dynamic",
@@ -334,20 +332,58 @@ def ring_reconfig():
                 iter_cnt=5001,
             ),
         ],
-        "--config eval/dynamic-config/reconfig.toml",
+        "--config eval/dynamic-config/my_reconfig.toml",
     )
     with open(f"../dynamic-config/launch-ring-reconfig.toml", "w") as f:
         toml.dump(config, f)
 
 
-setup2_vgg_qos()
-setup1_profile()
-setup1_fair()
-setup4_real_qos("fair")
-setup4_real_qos("qosv1")
-setup4_real_qos("qosv2")
-setup4_real_qos("fair", True)
-setup4_real_qos("qosv1", True)
-setup4_real_qos("qosv2", True)
-setup4_dynamic()
-ring_reconfig()
+def setup5_real_qos(setup: str, is_ecmp: bool = False):
+    # vgg_map = [(2, 2), (1, 2)]
+    gpt1_map = [(1, 1), (2, 1)]
+    gpt2_map = [(3, 1), (4, 1)]
+    if is_ecmp:
+        ecmp_str = "-ecmp"
+    else:
+        ecmp_str = ""
+
+    if setup == "qosv2":
+        config = f"eval/multi-app/output/setup5-mccs{ecmp_str}-config.toml"
+    else:
+        config = f"eval/multi-app/setup4-trace{ecmp_str}-{setup}.toml"
+
+    config = generate_traffic_gen_config(
+        f"setup5-real{ecmp_str}-{setup}",
+        f"setup5-real{ecmp_str}",
+        [
+            TraceProperties(
+                name="gpt_1",
+                config="workloads/setup-4_gpt_1.toml",
+                rank_map=gpt1_map,
+                iter_cnt=1501,
+            ),
+            TraceProperties(
+                name="gpt_2",
+                config="workloads/setup-4_gpt_2.toml",
+                rank_map=gpt2_map,
+                iter_cnt=1501,
+            ),
+        ],
+        "--config " + config,
+    )
+
+    with open(f"output/setup5-real{ecmp_str}-{setup}.toml", "w") as f:
+        toml.dump(config, f)
+
+# setup2_vgg_qos()
+# setup1_profile()
+# setup1_fair()
+# setup4_real_qos("fair")
+# setup4_real_qos("qosv1")
+# setup4_real_qos("qosv2")
+# setup4_real_qos("fair", True)
+# setup4_real_qos("qosv1", True)
+# setup4_real_qos("qosv2", True)
+# setup4_dynamic()
+# ring_reconfig()
+setup5_real_qos("qosv2")

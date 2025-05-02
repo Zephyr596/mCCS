@@ -1,0 +1,54 @@
+name = "setup5-real-qosv2"
+group = "setup5-real"
+[[worker]]
+host = "host1"
+bin = "mccs"
+args = "--host 1 --config eval/multi-app/output/setup5-mccs-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host2"
+bin = "mccs"
+args = "--host 2 --config eval/multi-app/output/setup5-mccs-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host3"
+bin = "mccs"
+args = "--host 3 --config eval/multi-app/output/setup5-mccs-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host4"
+bin = "mccs"
+args = "--host 4 --config eval/multi-app/output/setup5-mccs-config.toml"
+weak = true
+dependencies = []
+
+[[worker]]
+host = "host1"
+bin = "traffic_gen"
+args = "--root-addr 10.200.2.2 --rank 0 --iters 1501 --config workloads/setup-4_gpt_1.toml --verbose --name gpt_1"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host2"
+bin = "traffic_gen"
+args = "--root-addr 10.200.2.2 --rank 1 --iters 1501 --config workloads/setup-4_gpt_1.toml --verbose --name gpt_1"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host3"
+bin = "traffic_gen"
+args = "--root-addr 10.200.2.3 --rank 0 --iters 1501 --config workloads/setup-4_gpt_2.toml --verbose --name gpt_2"
+dependencies = [ 0, 1, 2, 3,]
+
+[[worker]]
+host = "host4"
+bin = "traffic_gen"
+args = "--root-addr 10.200.2.3 --rank 1 --iters 1501 --config workloads/setup-4_gpt_2.toml --verbose --name gpt_2"
+dependencies = [ 0, 1, 2, 3,]
+
