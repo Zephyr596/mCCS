@@ -1,0 +1,4 @@
+register ctx: prefix="/tmp/mccs-caoz0a", control="control.sock", affinity=None
+[gpt] Rank 1: start warmup
+[gpt] Rank 1: warmup phase AG finished
+[gpt] Rank 1: warmup phase finished

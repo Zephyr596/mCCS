@@ -1,0 +1,15 @@
+[18:58:30.488 INFO mccs::transport::net::provider::rdma] RDMA transport: using interface rdma0: SockAddr { ss_family: 2, len: 128 } for socket bootstrap
+[18:58:30.492 INFO mccs::transport::net::provider::rdma] Initialize RDMA device [0] mlx5_0:1, RoCE
+[18:58:30.594 INFO mccs::runtime::manager] Runtime 0 started, cuda=-1, CpuSet=["f"]
+[18:58:30.650 INFO mccs] Started mCCS
+[18:58:30.654 INFO mccs::runtime::manager] Runtime 1 started, cuda=0, CpuSet=["f"]
+[18:58:31.595 INFO mccs::runtime::manager] Runtime 2 started, cuda=-1, CpuSet=["f"]
+[18:58:31.882 INFO mccs::proxy::engine] Comm CommunicatorId(201), ring: 0 -> 1 -> 0
+[18:58:31.885 INFO mccs::proxy::engine] Comm CommunicatorId(201), ring: 0 -> 1 -> 0
+[18:58:31.885 INFO mccs::transport::net::transporter] Channel 0/0: 0 -> 1 [recv] via NET/mlx5_0/0, GDRDMA=false
+[18:58:31.885 INFO mccs::transport::net::transporter] Channel 0/0: 1 -> 0 [send] via NET/mlx5_0/0, udp_sport=None, GDRDMA=false
+[18:58:31.885 INFO mccs::transport::net::transporter] Channel 1/0: 0 -> 1 [recv] via NET/mlx5_0/0, GDRDMA=false
+[18:58:31.885 INFO mccs::transport::net::transporter] Channel 1/0: 1 -> 0 [send] via NET/mlx5_0/0, udp_sport=None, GDRDMA=false
+[18:58:31.894 INFO mccs::runtime::manager] Runtime 3 started, cuda=0, CpuSet=["f"]
+[18:58:32.118 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/bb9296feff6a6612)
+[18:58:32.167 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/bb9296feff6a6612)

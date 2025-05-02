@@ -1,0 +1,27 @@
+[14:36:36.515 INFO mccs::transport::net::provider::rdma] RDMA transport: using interface rdma0: SockAddr { ss_family: 2, len: 128 } for socket bootstrap
+[14:36:36.527 INFO mccs::transport::net::provider::rdma] Initialize RDMA device [0] mlx5_0:1, RoCE
+[14:36:36.581 INFO mccs::runtime::manager] Runtime 0 started, cuda=-1, CpuSet=["f"]
+[14:36:36.692 INFO mccs] Started mCCS
+[14:36:36.693 INFO mccs::runtime::manager] Runtime 1 started, cuda=0, CpuSet=["f"]
+[14:36:37.990 INFO mccs::runtime::manager] Runtime 2 started, cuda=-1, CpuSet=["f"]
+[14:36:38.765 INFO mccs::proxy::engine] Comm CommunicatorId(600), ring: 0 -> 1 -> 2 -> 3 -> 0
+[14:36:38.765 INFO mccs::proxy::engine] Comm CommunicatorId(600), ring: 0 -> 1 -> 2 -> 3 -> 0
+[14:36:38.765 INFO mccs::transport::net::transporter] Channel 0/0: 3 -> 0 [recv] via NET/mlx5_0/0, GDRDMA=false
+[14:36:38.765 INFO mccs::transport::net::transporter] Channel 0/0: 0 -> 1 [send] via NET/mlx5_0/0, udp_sport=None, GDRDMA=false
+[14:36:38.765 INFO mccs::transport::net::transporter] Channel 1/0: 3 -> 0 [recv] via NET/mlx5_0/0, GDRDMA=false
+[14:36:38.765 INFO mccs::transport::net::transporter] Channel 1/0: 0 -> 1 [send] via NET/mlx5_0/0, udp_sport=None, GDRDMA=false
+[14:36:38.774 INFO mccs::runtime::manager] Runtime 3 started, cuda=0, CpuSet=["f"]
+[14:36:39.025 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/cc045ffeff6a6612)
+[14:36:39.053 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/cc045ffeff6a6612)
+[14:41:35.636 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(600), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 1, channel: ChannelId(0), conn_index: 0, conn_type: Send } }
+[14:41:35.638 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(600), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 1, channel: ChannelId(1), conn_index: 0, conn_type: Send } }
+[14:41:35.657 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(600), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 3, channel: ChannelId(0), conn_index: 0, conn_type: Recv } }
+[14:41:35.669 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(600), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 3, channel: ChannelId(1), conn_index: 0, conn_type: Recv } }
+[14:41:35.682 INFO mccs::proxy::init] Comm CommunicatorId(600), ring: 0 -> 3 -> 2 -> 1 -> 0
+[14:41:35.682 INFO mccs::proxy::init] Comm CommunicatorId(600), ring: 0 -> 3 -> 2 -> 1 -> 0
+[14:41:35.749 INFO mccs::transport::net::transporter] Channel 0/0: 1 -> 0 [recv] via NET/mlx5_0/0, GDRDMA=false
+[14:41:35.749 INFO mccs::transport::net::transporter] Channel 0/0: 0 -> 3 [send] via NET/mlx5_0/0, udp_sport=None, GDRDMA=false
+[14:41:35.749 INFO mccs::transport::net::transporter] Channel 1/0: 1 -> 0 [recv] via NET/mlx5_0/0, GDRDMA=false
+[14:41:35.749 INFO mccs::transport::net::transporter] Channel 1/0: 0 -> 3 [send] via NET/mlx5_0/0, udp_sport=None, GDRDMA=false
+[14:41:35.981 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/cc045ffeff6a6612)
+[14:41:35.983 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/cc045ffeff6a6612)

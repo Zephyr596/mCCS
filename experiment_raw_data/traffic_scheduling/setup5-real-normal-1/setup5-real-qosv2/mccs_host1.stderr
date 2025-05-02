@@ -1,0 +1,19 @@
+[19:06:32.226 INFO mccs::transport::net::provider::rdma] RDMA transport: using interface rdma0: SockAddr { ss_family: 2, len: 128 } for socket bootstrap
+[19:06:32.234 INFO mccs::transport::net::provider::rdma] Initialize RDMA device [0] mlx5_0:1, RoCE
+[19:06:32.285 INFO mccs::runtime::manager] Runtime 0 started, cuda=-1, CpuSet=["f"]
+[19:06:32.365 INFO mccs] Started mCCS
+[19:06:32.369 INFO mccs::runtime::manager] Runtime 1 started, cuda=0, CpuSet=["f"]
+[19:06:33.541 INFO mccs::runtime::manager] Runtime 2 started, cuda=-1, CpuSet=["f"]
+[19:06:33.825 INFO mccs::proxy::engine] Comm CommunicatorId(201), ring: 0 -> 1 -> 0
+[19:06:33.829 INFO mccs::proxy::engine] Comm CommunicatorId(201), ring: 0 -> 1 -> 0
+[19:06:33.829 INFO mccs::transport::net::transporter] Channel 0/0: 1 -> 0 [recv] via NET/mlx5_0/0, GDRDMA=false
+[19:06:33.829 INFO mccs::transport::net::transporter] Channel 0/0: 0 -> 1 [send] via NET/mlx5_0/0, udp_sport=Some(49202), GDRDMA=false
+[19:06:33.830 INFO mccs::transport::net::transporter] Channel 1/0: 1 -> 0 [recv] via NET/mlx5_0/0, GDRDMA=false
+[19:06:33.830 INFO mccs::transport::net::transporter] Channel 1/0: 0 -> 1 [send] via NET/mlx5_0/0, udp_sport=Some(49202), GDRDMA=false
+[19:06:33.833 INFO mccs::runtime::manager] Runtime 3 started, cuda=0, CpuSet=["f"]
+[19:06:33.873 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/cc045ffeff6a6612)
+[19:06:33.897 INFO mccs::transport::net::provider::rdma] RDMA transport connect: device=0, port=1, mtu=3, GID=1 (80fe/cc045ffeff6a6612)
+[19:13:44.729 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(201), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 1, channel: ChannelId(0), conn_index: 0, conn_type: Send } }
+[19:13:44.745 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(201), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 1, channel: ChannelId(0), conn_index: 0, conn_type: Recv } }
+[19:13:44.765 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(201), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 1, channel: ChannelId(1), conn_index: 0, conn_type: Send } }
+[19:13:44.781 INFO mccs::transport::engine] shutdown TransportAgentId { communicator_id: CommunicatorId(201), client_rank: 0, client_cuda_dev: 0, peer_conn: PeerConnId { peer_rank: 1, channel: ChannelId(1), conn_index: 0, conn_type: Recv } }
