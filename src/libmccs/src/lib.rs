@@ -45,7 +45,7 @@ lazy_static::lazy_static! {
             Err(_) => PathBuf::from(DEFAULT_MCCS_PREFIX),
         }, |p| {
             let path = PathBuf::from(p);
-            assert!(path.is_dir(), "{path:?} is not a directly");
+            assert!(path.is_dir(), "{path:?} is not a directory");
             path
         })
     };
